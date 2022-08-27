@@ -71,7 +71,9 @@
         cols="10"
       >
         <v-img
-          :src="`https://picsum.photos/1920/1080?image=334`"
+          :src="`https://picsum.photos/1920/1080?image=229`"
+          height="300"
+          cover
         >
         </v-img>
       </v-col>
@@ -81,6 +83,7 @@
 
 <script>
 import { ref } from '@vue/reactivity'
+import { onMounted } from '@vue/runtime-core'
   export default {
     setup() {
       let taskTitle = ref(null)
@@ -89,20 +92,30 @@ import { ref } from '@vue/reactivity'
       function doneTask(id) {
         let task = tasks.value.filter(task => task.id === id)[0]
         task.done = !task.done
+        save_localStorage()
       };
 
       function deleteTask(id) {
-        console.log(id)
         tasks.value = tasks.value.filter(task => task.id !== id)
+        save_localStorage()
       };
 
       function addTask() {
         if (taskTitle.value !== null) {
           let newTask = { id: Date.now(), title: taskTitle.value, done: false }
           tasks.value.push(newTask)
+          save_localStorage()
           taskTitle.value = null
         }
       };
+
+      function  save_localStorage() {
+        localStorage.setItem('tasks_list', JSON.stringify(tasks.value))
+      };
+
+      onMounted (() =>{
+        tasks.value = localStorage.getItem('tasks_list') ? JSON.parse(localStorage.getItem('tasks_list')) : []
+      });
 
       return {tasks, taskTitle, doneTask, deleteTask, addTask}
     }
