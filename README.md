@@ -1,4 +1,6 @@
-# Vue3-todo-list
+# Vue3 To do list
+
+`Vue 3 - Vuetify 3.0 - Composition API`
 
 ## Sobre
 
